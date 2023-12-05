@@ -29,8 +29,8 @@ module H3
     #   59.81085794
     #
     # @return [Float] Length of edge in kilometres
-    def edge_length_km(resolution)
-      Bindings::Private.safe_call(:double, :edge_length_km, resolution)
+    def get_haxagon_edge_length_km(resolution)
+      Bindings::Private.safe_call(:double, :get_haxagon_edge_length_km, resolution)
     end
 
     # @!method edge_length_m(resolution)
@@ -44,7 +44,9 @@ module H3
     #   3229.482772
     #
     # @return [Float] Length of edge in metres
-    # attach_function :edge_length_m, :distanceM, [Resolution], :double
+    def get_haxagon_edge_length_m(resolution)
+      Bindings::Private.safe_call(:double, :get_haxagon_edge_length_m, resolution)
+    end
 
     # @!method hex_area_km2(resolution)
     #
@@ -57,7 +59,9 @@ module H3
     #   252.9033645
     #
     # @return [Float] Average hexagon area in square kilometres.
-    attach_function :hex_area_km2, :getHexagonAreaAvgKm2, [Resolution], :double
+    def get_hexagon_area_avg_km2(resolution)
+      Bindings::Private.safe_call(:double, :get_hexagon_area_avg_km2, resolution)
+    end
 
     # @!method hex_area_m2(resolution)
     #
@@ -70,7 +74,9 @@ module H3
     #   15047.5
     #
     # @return [Float] Average hexagon area in square metres.
-    attach_function :hex_area_m2, :getHexagonAreaAvgM2, [Resolution], :double
+    def get_hexagon_area_avg_m2(resolution)
+      Bindings::Private.safe_call(:double, :get_hexagon_area_avg_m2, resolution)
+    end
 
     # @!method hexagon_count(resolution)
     #
@@ -83,9 +89,9 @@ module H3
     #   14117882
     #
     # @return [Integer] Number of unique hexagons
-    def hexagon_count(resolution)
+    def get_num_cells(resolution)
       out = FFI::MemoryPointer.new(:int64)
-      H3::Bindings::Private.hexagon_count(resolution, out).tap do |code|
+      H3::Bindings::Private.get_num_cells(resolution, out).tap do |code|
         Bindings::Error::raise_error(code) unless code.zero?
       end
       out.read_int64
@@ -136,7 +142,9 @@ module H3
     #    2.6952182709835757e-09
     #
     # @return [Double] Area of cell in rads2
-    attach_function :cell_area_rads2, :cellAreaRads2, %i[h3_index], :double
+    def cell_area_rads2(h3_index)
+      Bindings::Private.safe_call(:double, :cell_area_rads2, h3_index)
+    end
 
     # @!method cell_area_km2
     #
@@ -147,7 +155,9 @@ module H3
     #    0.10939818864648902
     #
     # @return [Double] Area of cell in km2
-    attach_function :cell_area_km2, :cellAreaKm2, %i[h3_index], :double
+    def cell_area_km2(h3_index)
+      Bindings::Private.safe_call(:double, :cell_area_km2, h3_index)
+    end
 
     # @!method cell_area_m2
     #
@@ -158,72 +168,81 @@ module H3
     #    109398.18864648901
     #
     # @return [Double] Area of cell in metres squared
-    attach_function :cell_area_m2, :cellAreaM2, %i[h3_index], :double
+    def cell_area_m2(h3_index)
+      Bindings::Private.safe_call(:double, :cell_area_m2, h3_index)
+    end
 
-    # @!method exact_edge_length_rads
+    # @!method edge_length_rads
     #
     # Exact length of edge in rads
     #
     # @example Return the edge length
-    #    H3.exact_edge_length_rads(1266218516299644927)
+    #    H3.edge_length_rads(1266218516299644927)
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in rads
-    # attach_function :exact_edge_length_rads, :exactEdgeLengthRads, %i[h3_index], :double
+    def edge_length_rads(h3_index)
+      Bindings::Private.safe_call(:double, :edge_length_rads, h3_index)
+    end
 
-    # @!method exact_edge_length_km
+    # @!method edge_length_km
     #
     # Exact length of edge in kilometres
     #
     # @example Return the edge length
-    #    H3.exact_edge_length_km(1266218516299644927)
+    #    H3.edge_length_km(1266218516299644927)
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in kilometres
-    # attach_function :exact_edge_length_km, :exactEdgeLengthKm, %i[h3_index], :double
+    def edge_length_km(h3_index)
+      Bindings::Private.safe_call(:double, :edge_length_km, h3_index)
+    end
 
-    # @!method exact_edge_length_m
+    # @!method edge_length_m
     #
     # Exact length of edge in metres
     #
     # @example Return the edge length
-    #    H3.exact_edge_length_m(1266218516299644927)
+    #    H3.edge_length_m(1266218516299644927)
     #    3.287684056071637e-05
     #
     # @return [Double] Edge length in metres
-    # attach_function :exact_edge_length_m, :exactEdgeLengthM, %i[h3_index], :double
+    def edge_length_m(h3_index)
+      Bindings::Private.safe_call(:double, :edge_length_m, h3_index)
+    end
 
+    # TODO: point -> great_circle
     # Returns the radians distance between two points.
     #
     # @example Return radians distance.
-    #   H3.point_distance_rads([41.3964809, 2.160444], [41.3870609, 2.164917])
+    #   H3.great_circle_distance_rads([41.3964809, 2.160444], [41.3870609, 2.164917])
     #   0.00017453024784008713
     #
     # @return [Double] Radians distance between two points.
-    def point_distance_rads(origin, destination)
-      Bindings::Private.point_distance_rads(*build_geocoords(origin, destination))
+    def great_circle_distance_rads(origin, destination)
+      Bindings::Private.great_circle_distance_rads(*build_lat_lng_array(origin, destination))
     end
 
     # Returns the kilometres distance between two points.
     #
     # @example Return km distance.
-    #   H3.point_distance_km([41.3964809, 2.160444], [41.3870609, 2.164917])
+    #   H3.great_circle_distance_km([41.3964809, 2.160444], [41.3870609, 2.164917])
     #   1.1119334622766763
     #
     # @return [Double] KM distance between two points.
-    def point_distance_km(origin, destination)
-      Bindings::Private.point_distance_km(*build_geocoords(origin, destination))
+    def great_circle_distance_km(origin, destination)
+      Bindings::Private.great_circle_distance_km(*build_lat_lng_array(origin, destination))
     end
 
     # Returns the metre distance between two points.
     #
     # @example Return metre distance.
-    #   H3.point_distance_m([41.3964809, 2.160444], [41.3870609, 2.164917])
+    #   H3.great_circle_distance_m([41.3964809, 2.160444], [41.3870609, 2.164917])
     #   1111.9334622766764
     #
     # @return [Double] Metre distance between two points.
-    def point_distance_m(origin, destination)
-      Bindings::Private.point_distance_m(*build_geocoords(origin, destination))
+    def great_circle_distance_m(origin, destination)
+      Bindings::Private.great_circle_distance_m(*build_lat_lng_array(origin, destination))
     end
 
     # Returns all resolution 0 hexagons (base cells).
@@ -248,17 +267,17 @@ module H3
     # @return [Array<Integer>] All pentagon indexes at the given resolution.
     def pentagons(resolution)
       out = H3Indexes.of_size(pentagon_count)
-      Bindings::Private.get_pentagon_indexes(resolution, out)
+      Bindings::Private.get_pentagons(resolution, out)
       out.read
     end
 
     private
 
-    def build_geocoords(origin, destination)
+    def build_lat_lng_array(origin, destination)
       [origin, destination].inject([]) do |acc, coords|
         validate_coordinate(coords)
 
-        geo_coord = GeoCoord.new
+        geo_coord = LatLng.new
         lat, lon = coords
         geo_coord[:lat] = degs_to_rads(lat)
         geo_coord[:lon] = degs_to_rads(lon)

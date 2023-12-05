@@ -14,12 +14,12 @@ module H3
 
       class CellBoundary < FFI::Struct
         layout :num_verts, :int,
-               :verts, [LatLng, 10] # array of GeoCoord structs (must be fixed length)
+               :verts, [LatLng, 10] # array of LatLng structs (must be fixed length)
       end
 
       class GeoFence < FFI::Struct
         layout :num_verts, :int,
-               :verts, :pointer # array of GeoCoord structs
+               :verts, :pointer # array of LatLng structs
       end
 
       class GeoPolygon < FFI::Struct
@@ -33,20 +33,20 @@ module H3
                :polygons, :pointer # array of GeoPolygon structs
       end
 
-      class LinkedGeoCoord < FFI::Struct
+      class LinkedLatLng < FFI::Struct
         layout :vertex, LatLng,
-               :next, LinkedGeoCoord.ptr
+               :next, LinkedLatLng.ptr
       end
 
       class LinkedGeoLoop < FFI::Struct
-        layout :first, LinkedGeoCoord.ptr,
-               :last, LinkedGeoCoord.ptr,
+        layout :first, LinkedLatLng.ptr,
+               :last, LinkedLatLng.ptr,
                :next, LinkedGeoLoop.ptr
       end
 
       class LinkedGeoPolygon < FFI::Struct
-        layout :first, LinkedGeoLoop.ptr,
-               :last, LinkedGeoLoop.ptr,
+        layout :first, LinkedLatLng.ptr,
+               :last, LinkedLatLng.ptr,
                :next, LinkedGeoPolygon.ptr
       end
 

@@ -22,7 +22,7 @@ module H3
     #     [[-1.4556884765625,52.01531743663362],[-1.483154296875,51.97642166216334],
     #     [-1.3677978515625,51.96626938051444],[-1.3568115234375,52.0102459910103],
     #     [-1.4556884765625,52.01531743663362]]]}"
-    #   H3.max_polyfill_size(geo_json, 9)
+    #   H3.max_polygon_to_cells_size(geo_json, 9)
     #   33391
     #
     # @example Derive maximum number of hexagons for a nested array of coordinates.
@@ -44,13 +44,13 @@ module H3
     #       [52.01531743663362, -1.4556884765625]
     #     ]
     #   ]
-    #   H3.max_polyfill_size(coordinates, 9)
+    #   H3.max_polygon_to_cells_size(coordinates, 9)
     #   33391
     #
-    # @return [Integer] Maximum number of hexagons needed to polyfill given area.
-    def max_polyfill_size(geo_polygon, resolution)
+    # @return [Integer] Maximum number of hexagons needed to fille a given area using polygon_to_cells.
+    def max_polygon_to_cells_size(geo_polygon, resolution, flags)
       geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
-      Bindings::Private.max_polyfill_size(build_polygon(geo_polygon), resolution)
+      Bindings::Private.safe_call(:int64, :max_polygon_to_cells_size, build_polygon(geo_polygon), resolution, flags)
     end
 
     # Derive a list of H3 indexes that fall within a given geo polygon structure.
@@ -70,7 +70,7 @@ module H3
     #     [[-1.4556884765625,52.01531743663362],[-1.483154296875,51.97642166216334],
     #     [-1.3677978515625,51.96626938051444],[-1.3568115234375,52.0102459910103],
     #     [-1.4556884765625,52.01531743663362]]]}"
-    #   H3.polyfill(geo_json, 5)
+    #   H3.polygon_to_cells(geo_json, 5)
     #   [
     #     599424968551301119, 599424888020664319, 599424970698784767, 599424964256333823,
     #     599424969625042943, 599425001837297663, 599425000763555839
@@ -95,18 +95,18 @@ module H3
     #       [52.01531743663362, -1.4556884765625]
     #     ]
     #   ]
-    #   H3.polyfill(coordinates, 5)
+    #   H3.polygon_to_cells(coordinates, 5)
     #   [
     #     599424968551301119, 599424888020664319, 599424970698784767, 599424964256333823,
     #     599424969625042943, 599425001837297663, 599425000763555839
     #   ]
     #
-    # @return [Array<Integer>] Hexagons needed to polyfill given area.
-    def polyfill(geo_polygon, resolution)
+    # @return [Array<Integer>] Hexagons needed to polygon_to_cells given area.
+    def polygon_to_cells(geo_polygon, resolution, flags)
       geo_polygon = geo_json_to_coordinates(geo_polygon) if geo_polygon.is_a?(String)
-      max_size = max_polyfill_size(geo_polygon, resolution)
+      max_size = max_polygon_to_cells_size(geo_polygon, resolution, flags)
       out = H3Indexes.of_size(max_size)
-      Bindings::Private.polyfill(build_polygon(geo_polygon), resolution, out)
+      Bindings::Private.polygon_to_cells(build_polygon(geo_polygon), resolution, flags, out)
       out.read
     end
 
@@ -120,7 +120,7 @@ module H3
     #     599424964256333823, 599424969625042943, 599425001837297663,
     #     599425000763555839
     #   ]
-    #   H3.h3_set_to_linked_geo(h3_indexes)
+    #   H3.cells_to_linked_multi_polygon(h3_indexes)
     #   [
     #     [
     #       [52.24425364171531, -1.6470570189756442], [52.19515282473624, -1.7508281227260887],
@@ -136,15 +136,16 @@ module H3
     #   ]
     #
     # @return [Array<Array<Array<Float>>>] Nested array of coordinates.
-    def h3_set_to_linked_geo(h3_indexes)
+    def cells_to_linked_multi_polygon(h3_indexes)
       h3_set = H3Indexes.with_contents(h3_indexes)
       linked_geo_polygon = LinkedGeoPolygon.new
-      Bindings::Private.h3_set_to_linked_geo(h3_set, h3_indexes.size, linked_geo_polygon)
+      err = Bindings::Private.cells_to_linked_multi_polygon(h3_set, h3_indexes.size, linked_geo_polygon)
+      Error::raise_error(err) unless err.zero?
 
       # The algorithm in h3 currently only handles 1 polygon
       extract_linked_geo_polygon(linked_geo_polygon).first
     ensure
-      Bindings::Private.destroy_linked_polygon(linked_geo_polygon)
+      Bindings::Private.destroy_linked_multi_polygon(linked_geo_polygon)
     end
 
     private
@@ -228,9 +229,9 @@ module H3
       geo_fence = GeoFence.new
       len = input.count
       geo_fence[:num_verts] = len
-      ptr = FFI::MemoryPointer.new(GeoCoord, len)
+      ptr = FFI::MemoryPointer.new(LatLng, len)
       coords = 0.upto(len).map do |i|
-        GeoCoord.new(ptr + i * GeoCoord.size)
+        LatLng.new(ptr + i * LatLng.size)
       end
       input.each_with_index do |(lat, lon), i|
         coords[i][:lat] = degs_to_rads(lat)

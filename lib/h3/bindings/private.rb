@@ -20,7 +20,7 @@ module H3
       attach_function :cell_area_m2, :cellAreaM2, %i[h3_index buffer_out], :h3_error_code
       attach_function :cell_area_rads2, :cellAreaRads2, %i[h3_index buffer_out], :h3_error_code
       attach_function :compactCells, [H3IndexesIn, H3IndexesOut, :int64], :h3_error_code
-      # attach_function :destroy_linked_polygon, :destroyLinkedPolygon, [LinkedGeoPolygon], :void
+      attach_function :destroy_linked_multi_polygon, :destroyLinkedMultiPolygon, [LinkedGeoPolygon], :void
       attach_function :edge_length_km, :edgeLengthKm, %i[h3_index buffer_out], :h3_error_code
       attach_function :edge_length_m, :edgeLengthM, %i[h3_index buffer_out], :h3_error_code
       attach_function :edge_length_rads, :edgeLengthRads, %i[h3_index buffer_out], :h3_error_code
@@ -40,10 +40,10 @@ module H3
       # attach_function :h3_unidirectional_edges_from_hexagon,
       #                 :getH3UnidirectionalEdgesFromHexagon,
       #                 [:h3_index, H3IndexesOut], :void
-      # attach_function :h3_set_to_linked_geo,
-      #                 :h3SetToLinkedGeo,
-      #                 [H3IndexesIn, :size_t, LinkedGeoPolygon],
-      #                 :void
+      attach_function :cells_to_linked_multi_polygon,
+                      :cellsToLinkedMultiPolygon,
+                      [H3IndexesIn, :size_t, LinkedGeoPolygon],
+                      :h3_error_code
       attach_function :h3_to_children, :cellToChildren, [:h3_index, Resolution, H3IndexesOut], :h3_error_code
       attach_function :h3_to_geo, :cellToLatLng, [:h3_index, LatLng], :h3_error_code
       attach_function :h3_to_string, :h3ToString, %i[h3_index buffer_out size_t], :h3_error_code
@@ -70,15 +70,15 @@ module H3
       #                 :bool
       attach_function :max_children, :cellToChildrenSize, [:h3_index, Resolution, :pointer], :h3_error_code
       attach_function :max_face_count, :maxFaceCount, %i[h3_index pointer], :h3_error_code
-      # attach_function :max_polyfill_size,
-      #                 :maxPolyfillSize,
-      #                 [GeoPolygon, Resolution],
-      #                 :int
+      attach_function :max_polygon_to_cells_size,
+                      :maxPolygonToCellsSize,
+                      [GeoPolygon, Resolution, :uint32, :buffer_out], # int_64
+                      :h3_error_code
       attach_function :max_uncompact_size, :uncompactCellsSize, [H3IndexesIn, :int64, Resolution, :pointer], :h3_error_code
       attach_function :great_circle_distance_rads, :greatCircleDistanceRads, [LatLng, LatLng], :double
       attach_function :great_circle_distance_km, :greatCircleDistanceKm, [LatLng, LatLng], :double
       attach_function :great_circle_distance_m, :greatCircleDistanceM, [LatLng, LatLng], :double
-      # attach_function :polyfill, [GeoPolygon, Resolution, H3IndexesOut], :void
+      attach_function :polygon_to_cells, :polygonToCells, [GeoPolygon, Resolution, :uint32, H3IndexesOut], :h3_error_code
       attach_function :res_0_indexes, :getRes0Cells, [H3IndexesOut], :h3_error_code
       attach_function :uncompactCells, [H3IndexesIn, :size_t, H3IndexesOut, :size_t, Resolution], :h3_error_code
     end

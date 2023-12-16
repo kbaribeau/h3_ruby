@@ -45,8 +45,8 @@ module H3
       end
 
       class LinkedGeoPolygon < FFI::Struct
-        layout :first, LinkedLatLng.ptr,
-               :last, LinkedLatLng.ptr,
+        layout :first, LinkedGeoLoop.ptr,
+               :last, LinkedGeoLoop.ptr,
                :next, LinkedGeoPolygon.ptr
       end
 

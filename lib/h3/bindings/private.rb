@@ -24,19 +24,21 @@ module H3
       attach_function :edge_length_km, :edgeLengthKm, %i[h3_index buffer_out], :h3_error_code
       attach_function :edge_length_m, :edgeLengthM, %i[h3_index buffer_out], :h3_error_code
       attach_function :edge_length_rads, :edgeLengthRads, %i[h3_index buffer_out], :h3_error_code
+      attach_function :from_string, :stringToH3, %i[string pointer], :h3_error_code
+      attach_function :geo_to_h3, :latLngToCell, [LatLng, Resolution, :pointer], :h3_error_code
       attach_function :get_haxagon_edge_length_km, :getHexagonEdgeLengthAvgKm, [Resolution, :pointer], :h3_error_code
       attach_function :get_haxagon_edge_length_m, :getHexagonEdgeLengthAvgM, [Resolution, :pointer], :h3_error_code
-      attach_function :from_string, :stringToH3, %i[string pointer], :h3_error_code
       attach_function :get_hexagon_area_avg_km2, :getHexagonAreaAvgKm2, [Resolution, :pointer], :h3_error_code
       attach_function :get_hexagon_area_avg_m2, :getHexagonAreaAvgM2, [Resolution, :pointer], :h3_error_code
-      attach_function :geo_to_h3, :latLngToCell, [LatLng, Resolution, :pointer], :h3_error_code
-      attach_function :get_pentagons, :getPentagons, [:int, H3IndexesOut], :void
       attach_function :get_num_cells, :getNumCells, [Resolution, :pointer], :h3_error_code
+      attach_function :get_pentagons, :getPentagons, [:int, H3IndexesOut], :void
+      attach_function :grid_distance, :gridDistance, %i[h3_index h3_index buffer_out], :h3_error_code
+      attach_function :grid_path_cells, :gridPathCells, [:h3_index, :h3_index, H3IndexesOut], :h3_error_code
+      attach_function :grid_path_cells_size, :gridPathCellsSize, %i[h3_index h3_index buffer_out], :h3_error_code
       attach_function :h3_faces, :getIcosahedronFaces, %i[h3_index buffer_out], :h3_error_code
       # attach_function :h3_indexes_from_unidirectional_edge,
       #                 :getH3IndexesFromUnidirectionalEdge,
       #                 [:h3_index, H3IndexesOut], :void
-      # attach_function :h3_line, :h3Line, [:h3_index, :h3_index, H3IndexesOut], :int
       # attach_function :h3_unidirectional_edges_from_hexagon,
       #                 :getH3UnidirectionalEdgesFromHexagon,
       #                 [:h3_index, H3IndexesOut], :void
@@ -54,22 +56,20 @@ module H3
       # attach_function :h3_unidirectional_edge_boundary,
       #                 :getH3UnidirectionalEdgeBoundary,
       #                 [:h3_index, CellBoundary], :void
-      # attach_function :hex_range, :hexRange, [:h3_index, :k_distance, H3IndexesOut], :bool
-      # attach_function :hex_range_distances,
-      #                 :hexRangeDistances,
-      #                 [:h3_index, :k_distance, H3IndexesOut, :buffer_out], :bool
-      # attach_function :hex_ranges,
-      #                 :hexRanges,
-      #                 [H3IndexesIn, :size_t, :k_distance, H3IndexesOut],
-      #                 :bool
-      # attach_function :hex_ring, :hexRing, [:h3_index, :k_distance, H3IndexesOut], :bool
-      attach_function :k_ring, :gridDisk, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
-      # attach_function :k_ring_distances,
-      #                 :kRingDistances,
-      #                 [:h3_index, :k_distance, H3IndexesOut, :buffer_out],
-      #                 :bool
+      attach_function :grid_disk, :gridDisk, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
+      attach_function :grid_disk_unsafe, :gridDiskUnsafe, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
+      attach_function :grid_disks_unsafe, :gridDisksUnsafe, [H3IndexesIn, :int, :k_distance, H3IndexesOut], :h3_error_code
+      attach_function :grid_disk_distances,
+                      :gridDiskDistances,
+                      [:h3_index, :int, H3IndexesOut, :buffer_out],
+                      :h3_error_code
+      attach_function :grid_disk_distances_unsafe,
+                      :gridDiskDistancesUnsafe,
+                      [:h3_index, :k_distance, H3IndexesOut, :buffer_out], :h3_error_code
+      attach_function :grid_ring_unsafe, :gridRingUnsafe, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
       attach_function :max_children, :cellToChildrenSize, [:h3_index, Resolution, :pointer], :h3_error_code
       attach_function :max_face_count, :maxFaceCount, %i[h3_index pointer], :h3_error_code
+      attach_function :max_grid_disk_size, :maxGridDiskSize, %i[k_distance buffer_out], :h3_error_code
       attach_function :max_polygon_to_cells_size,
                       :maxPolygonToCellsSize,
                       [GeoPolygon, Resolution, :uint32, :buffer_out], # int_64

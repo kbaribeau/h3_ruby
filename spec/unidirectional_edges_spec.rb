@@ -18,12 +18,12 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".unidirectional_edge" do
+  describe ".cells_to_directed_edge" do
     let(:origin) { "8928308280fffff".to_i(16) }
     let(:destination) { "8928308280bffff".to_i(16) }
     let(:result) { "16928308280fffff".to_i(16) }
 
-    subject(:unidirectional_edge) { H3.unidirectional_edge(origin, destination) }
+    subject { H3.cells_to_directed_edge(origin, destination) }
 
     it { is_expected.to eq(result) }
   end

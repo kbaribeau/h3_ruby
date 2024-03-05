@@ -18,6 +18,9 @@ module H3
     #
     # @return [Boolean] True if indexes are neighbors
     attach_predicate_function :neighbors?, :areNeighborCells, %i[h3_index h3_index], :bool
+    def neighbors?(h3_index, h3_index2)
+      Bindings::Private.safe_call(:int64, :areNeighborCells, h3_index, h3_index2) > 0
+    end
 
     # @!method unidirectional_edge_valid?(h3_index)
     #
@@ -47,10 +50,9 @@ module H3
     #   1626506486489284607
     #
     # @return [Integer] H3 edge index
-    attach_function :unidirectional_edge,
-                    :cellsToDirectedEdge,
-                    %i[h3_index h3_index],
-                    :h3_index
+    def cells_to_directed_edge(origin, destination)
+      Bindings::Private.safe_call(:ulong_long, :cells_to_directed_edge, origin, destination)
+    end
 
     # @!method destination_from_unidirectional_edge(edge)
     #

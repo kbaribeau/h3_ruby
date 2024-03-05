@@ -15,10 +15,12 @@ module H3
         out.send("read_#{out_type}".to_sym)
       end
 
+      attach_function :areNeighborCells, %i[h3_index h3_index buffer_out], :h3_error_code
       attach_function :cellToParent, [:h3_index, Resolution, H3Index], :h3_error_code
       attach_function :cell_area_km2, :cellAreaKm2, %i[h3_index buffer_out], :h3_error_code
       attach_function :cell_area_m2, :cellAreaM2, %i[h3_index buffer_out], :h3_error_code
       attach_function :cell_area_rads2, :cellAreaRads2, %i[h3_index buffer_out], :h3_error_code
+      attach_function :cells_to_directed_edge, :cellsToDirectedEdge, %i[h3_index h3_index buffer_out], :h3_error_code
       attach_function :compactCells, [H3IndexesIn, H3IndexesOut, :int64], :h3_error_code
       attach_function :destroy_linked_multi_polygon, :destroyLinkedMultiPolygon, [LinkedGeoPolygon], :void
       attach_function :edge_length_km, :edgeLengthKm, %i[h3_index buffer_out], :h3_error_code

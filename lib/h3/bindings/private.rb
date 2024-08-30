@@ -38,7 +38,7 @@ module H3
       attach_function :grid_path_cells, :gridPathCells, [:h3_index, :h3_index, H3IndexesOut], :h3_error_code
       attach_function :grid_path_cells_size, :gridPathCellsSize, %i[h3_index h3_index buffer_out], :h3_error_code
       attach_function :h3_faces, :getIcosahedronFaces, %i[h3_index buffer_out], :h3_error_code
-      attach_function :origin_from_unidirectional_edge, :getDirectedEdgeOrigin, %i[h3_index pointer], :h3_error_code
+      attach_function :get_directed_edge_origin, :getDirectedEdgeOrigin, %i[h3_index pointer], :h3_error_code
       attach_function :h3_indexes_from_unidirectional_edge, :directedEdgeToCells, [:h3_index, H3IndexesOut], :h3_error_code
       attach_function :get_directed_edge_destination, :getDirectedEdgeDestination, %i[h3_index pointer], :h3_error_code
       attach_function :h3_unidirectional_edges_from_hexagon, :originToDirectedEdges, [:h3_index, H3IndexesOut], :h3_error_code

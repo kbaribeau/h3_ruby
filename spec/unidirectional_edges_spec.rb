@@ -44,11 +44,11 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".origin_from_unidirectional_edge" do
+  describe ".get_directed_edge_origin" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { "8928308280fffff".to_i(16) }
 
-    subject(:origin_from_unidirectional_edge) { H3.origin_from_unidirectional_edge(edge) }
+    subject(:get_directed_edge_origin) { H3.get_directed_edge_origin(edge) }
 
     it { is_expected.to eq(result) }
   end
@@ -77,9 +77,9 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".unidirectional_edges_from_hexagon" do
-    subject(:unidirectional_edges_from_hexagon) do
-      H3.unidirectional_edges_from_hexagon(h3_index)
+  describe ".origin_to_directed_edges" do
+    subject(:origin_to_directed_edges) do
+      H3.origin_to_directed_edges(h3_index)
     end
 
     context "when index is a hexagon" do
@@ -87,7 +87,7 @@ RSpec.describe H3 do
       let(:count) { 6 }
 
       it "has six expected edges" do
-        expect(unidirectional_edges_from_hexagon.count).to eq(count)
+        expect(origin_to_directed_edges.count).to eq(count)
       end
     end
 
@@ -96,7 +96,7 @@ RSpec.describe H3 do
       let(:count) { 5 }
 
       it "has five expected edges" do
-        expect(unidirectional_edges_from_hexagon.count).to eq(count)
+        expect(origin_to_directed_edges.count).to eq(count)
       end
     end
   end

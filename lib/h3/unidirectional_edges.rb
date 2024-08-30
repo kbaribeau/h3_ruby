@@ -65,10 +65,9 @@ module H3
     #   617700169961177087
     #
     # @return [Integer] H3 index
-    attach_function :get_directed_edge_destination,
-                    :getDirectedEdgeDestination,
-                    %i[h3_index],
-                    :h3_index
+    def get_directed_edge_destination(h3_index)
+      Bindings::Private.safe_call(:ulong_long, :get_directed_edge_destination, h3_index)
+    end
 
     # @!method origin_from_unidirectional_edge(edge)
     #

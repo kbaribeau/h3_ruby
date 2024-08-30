@@ -38,36 +38,21 @@ module H3
       attach_function :grid_path_cells, :gridPathCells, [:h3_index, :h3_index, H3IndexesOut], :h3_error_code
       attach_function :grid_path_cells_size, :gridPathCellsSize, %i[h3_index h3_index buffer_out], :h3_error_code
       attach_function :h3_faces, :getIcosahedronFaces, %i[h3_index buffer_out], :h3_error_code
-      # attach_function :h3_indexes_from_unidirectional_edge,
-      #                 :getH3IndexesFromUnidirectionalEdge,
-      #                 [:h3_index, H3IndexesOut], :void
-      # attach_function :h3_unidirectional_edges_from_hexagon,
-      #                 :getH3UnidirectionalEdgesFromHexagon,
-      #                 [:h3_index, H3IndexesOut], :void
-      attach_function :cells_to_linked_multi_polygon,
-                      :cellsToLinkedMultiPolygon,
-                      [H3IndexesIn, :size_t, LinkedGeoPolygon],
-                      :h3_error_code
+      attach_function :origin_from_unidirectional_edge, :getDirectedEdgeOrigin, %i[h3_index pointer], :h3_error_code
+      attach_function :h3_indexes_from_unidirectional_edge, :directedEdgeToCells, [:h3_index, H3IndexesOut], :h3_error_code
+      attach_function :get_directed_edge_destination, :getDirectedEdgeDestination, %i[h3_index pointer], :h3_error_code
+      attach_function :h3_unidirectional_edges_from_hexagon, :originToDirectedEdges, [:h3_index, H3IndexesOut], :h3_error_code
+      attach_function :cells_to_linked_multi_polygon, :cellsToLinkedMultiPolygon, [H3IndexesIn, :size_t, LinkedGeoPolygon], :h3_error_code
       attach_function :h3_to_children, :cellToChildren, [:h3_index, Resolution, H3IndexesOut], :h3_error_code
       attach_function :h3_to_geo, :cellToLatLng, [:h3_index, LatLng], :h3_error_code
       attach_function :h3_to_string, :h3ToString, %i[h3_index buffer_out size_t], :h3_error_code
-      attach_function :h3_to_geo_boundary,
-                      :cellToBoundary,
-                      [:h3_index, CellBoundary],
-                      :h3_error_code
-      # attach_function :h3_unidirectional_edge_boundary,
-      #                 :getH3UnidirectionalEdgeBoundary,
-      #                 [:h3_index, CellBoundary], :void
+      attach_function :h3_to_geo_boundary, :cellToBoundary, [:h3_index, CellBoundary], :h3_error_code
+      attach_function :h3_unidirectional_edge_boundary, :directedEdgeToBoundary, [:h3_index, CellBoundary], :h3_error_code
       attach_function :grid_disk, :gridDisk, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
       attach_function :grid_disk_unsafe, :gridDiskUnsafe, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
       attach_function :grid_disks_unsafe, :gridDisksUnsafe, [H3IndexesIn, :int, :k_distance, H3IndexesOut], :h3_error_code
-      attach_function :grid_disk_distances,
-                      :gridDiskDistances,
-                      [:h3_index, :int, H3IndexesOut, :buffer_out],
-                      :h3_error_code
-      attach_function :grid_disk_distances_unsafe,
-                      :gridDiskDistancesUnsafe,
-                      [:h3_index, :k_distance, H3IndexesOut, :buffer_out], :h3_error_code
+      attach_function :grid_disk_distances, :gridDiskDistances, [:h3_index, :int, H3IndexesOut, :buffer_out], :h3_error_code
+      attach_function :grid_disk_distances_unsafe, :gridDiskDistancesUnsafe, [:h3_index, :k_distance, H3IndexesOut, :buffer_out], :h3_error_code
       attach_function :grid_ring_unsafe, :gridRingUnsafe, [:h3_index, :k_distance, H3IndexesOut], :h3_error_code
       attach_function :max_children, :cellToChildrenSize, [:h3_index, Resolution, :pointer], :h3_error_code
       attach_function :max_face_count, :maxFaceCount, %i[h3_index pointer], :h3_error_code

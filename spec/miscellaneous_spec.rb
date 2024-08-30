@@ -39,20 +39,20 @@ RSpec.describe H3 do
 
   describe ".get_hexagon_area_avg_km2" do
     let(:resolution) { 2 }
-    let(:result) { 86745.85403 } # changed to  86801.7803989972 in v4??
+    let(:result) { 86801.7803989972 }
 
     subject(:get_hexagon_area_avg_km2) { H3.get_hexagon_area_avg_km2(resolution) }
 
-    xit { is_expected.to eq(result) } # FIXME
+    it { is_expected.to eq(result) }
   end
 
   describe ".get_hexagon_area_avg_m2" do
     let(:resolution) { 2 }
-    let(:result) { 86745854035.0 } # changed to  86801780398.99731 in v4 ??
+    let(:result) { 86801780398.99731 }
 
     subject(:get_hexagon_area_avg_m2) { H3.get_hexagon_area_avg_m2(resolution) }
 
-    xit { is_expected.to eq(result) } # FIXME
+    it { is_expected.to eq(result) }
   end
 
   describe ".get_haxagon_edge_length_km" do

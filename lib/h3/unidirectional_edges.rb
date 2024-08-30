@@ -119,7 +119,7 @@ module H3
     def origin_to_directed_edges(origin)
       max_edges = 6
       out = H3Indexes.of_size(max_edges)
-      Bindings::Private.h3_origin_to_directed_edges(origin, out)
+      Bindings::Private.origin_to_directed_edges(origin, out)
       out.read
     end
 
@@ -138,7 +138,7 @@ module H3
     # @return [Array<Array<Float>>] Edge boundary coordinates for a hexagon
     def directed_edge_boundary(edge)
       geo_boundary = CellBoundary.new
-      Bindings::Private.h3_directed_edge_boundary(edge, geo_boundary)
+      Bindings::Private.directed_edge_to_boundary(edge, geo_boundary)
       geo_boundary[:verts].take(geo_boundary[:num_verts]).map do |d|
         [rads_to_degs(d[:lat]), rads_to_degs(d[:lon])]
       end

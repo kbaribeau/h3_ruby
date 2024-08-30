@@ -101,16 +101,16 @@ RSpec.describe H3 do
     end
   end
 
-  describe ".unidirectional_edge_boundary" do
+  describe ".directed_edge_boundary" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:expected) do
       [[37.77820687262237, -122.41971895414808], [37.77652420699321, -122.42079024541876]]
     end
 
-    subject(:unidirectional_edge_boundary) { H3.unidirectional_edge_boundary(edge) }
+    subject(:directed_edge_boundary) { H3.directed_edge_boundary(edge) }
 
     it "matches expected coordinates" do
-      unidirectional_edge_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
+      directed_edge_boundary.zip(expected) do |(lat, lon), (exp_lat, exp_lon)|
         expect(lat).to be_within(0.000001).of(exp_lat)
         expect(lon).to be_within(0.000001).of(exp_lon)
       end

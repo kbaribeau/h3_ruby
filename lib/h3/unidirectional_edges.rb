@@ -22,18 +22,18 @@ module H3
       Bindings::Private.safe_call(:int64, :areNeighborCells, h3_index, h3_index2) > 0
     end
 
-    # @!method unidirectional_edge_valid?(h3_index)
+    # @!method directed_edge_valid?(h3_index)
     #
-    # Determine whether the given H3 index represents an edge.
+    # Determine whether the given H3 index represents a directed edge.
     #
     # @param [Integer] h3_index H3 index
     #
-    # @example Check if H3 index is a valid unidirectional edge.
-    #   H3.unidirectional_edge_valid?(1266218516299644927)
+    # @example Check if H3 index is a valid directed edge.
+    #   H3.directed_edge_valid?(1266218516299644927)
     #   true
     #
-    # @return [Boolean] True if H3 index is a valid unidirectional edge
-    attach_predicate_function :unidirectional_edge_valid?,
+    # @return [Boolean] True if H3 index is a valid directed edge
+    attach_predicate_function :directed_edge_valid?,
                               :isValidDirectedEdge,
                               %i[h3_index],
                               :bool

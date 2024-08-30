@@ -28,15 +28,15 @@ RSpec.describe H3 do
     it { is_expected.to eq(result) }
   end
 
-  describe ".unidirectional_edge_valid?" do
+  describe ".directed_edge_valid?" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_unidirectional_edge_valid?) { H3.unidirectional_edge_valid?(edge) }
+    subject(:h3_directed_edge_valid?) { H3.directed_edge_valid?(edge) }
 
     it { is_expected.to eq(result) }
 
-    context "when the h3 index is not a valid unidirectional edge" do
+    context "when the h3 index is not a valid directed edge" do
       let(:edge) { "8928308280fffff".to_i(16) }
       let(:result) { false }
 

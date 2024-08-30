@@ -81,10 +81,9 @@ module H3
     #   617700169958293503
     #
     # @return [Integer] H3 index
-    attach_function :origin_from_unidirectional_edge,
-                    :getDirectedEdgeOrigin,
-                    %i[h3_index],
-                    :h3_index
+    def origin_from_unidirectional_edge(h3_index)
+      Bindings::Private.safe_call(:ulong_long, :origin_from_unidirectional_edge, h3_index)
+    end
 
     # Derive origin and destination H3 indexes from edge.
     #

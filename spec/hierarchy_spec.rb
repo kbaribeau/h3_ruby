@@ -128,7 +128,7 @@ RSpec.describe H3 do
     let(:h3_index) { "89283470c27ffff".to_i(16) }
     let(:k) { 9 }
     let(:uncompacted) do
-      H3.k_ring(h3_index, k)
+      H3.grid_disk(h3_index, k)
     end
 
     subject(:compact) { H3.compact(uncompacted) }

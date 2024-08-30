@@ -28,11 +28,11 @@ RSpec.describe H3 do
     it { is_expected.to eq(result) }
   end
 
-  describe ".directed_edge_valid?" do
+  describe ".is_directed_edge_valid?" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { true }
 
-    subject(:h3_directed_edge_valid?) { H3.directed_edge_valid?(edge) }
+    subject(:h3_is_directed_edge_valid?) { H3.is_directed_edge_valid?(edge) }
 
     it { is_expected.to eq(result) }
 

@@ -53,11 +53,11 @@ RSpec.describe H3 do
     it { is_expected.to eq(result) }
   end
 
-  describe ".destination_from_unidirectional_edge" do
+  describe ".get_directed_edge_destination" do
     let(:edge) { "11928308280fffff".to_i(16) }
     let(:result) { "8928308283bffff".to_i(16) }
 
-    subject(:destination_from_unidirectional_edge) { H3.destination_from_unidirectional_edge(edge) }
+    subject(:get_directed_edge_destination) { H3.get_directed_edge_destination(edge) }
 
     it { is_expected.to eq(result) }
   end

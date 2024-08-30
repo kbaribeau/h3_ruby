@@ -54,18 +54,18 @@ module H3
       Bindings::Private.safe_call(:ulong_long, :cells_to_directed_edge, origin, destination)
     end
 
-    # @!method destination_from_unidirectional_edge(edge)
+    # @!method get_directed_edge_destination(edge)
     #
     # Derive destination H3 index from edge.
     #
     # @param [Integer] edge H3 edge index
     #
     # @example Get destination index from edge
-    #   H3.destination_from_unidirectional_edge(1266218516299644927)
+    #   H3.get_directed_edge_destination(1266218516299644927)
     #   617700169961177087
     #
     # @return [Integer] H3 index
-    attach_function :destination_from_unidirectional_edge,
+    attach_function :get_directed_edge_destination,
                     :getDirectedEdgeDestination,
                     %i[h3_index],
                     :h3_index
